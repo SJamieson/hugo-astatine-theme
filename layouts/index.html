@@ -1,10 +1,25 @@
 {{ define "main" }}
     {{ partial "info.html" . }}
     {{ .Content }}
+    {{ with .Params.Talks }}
+        <h2 id="talks">Recent & Upcoming Talks</h2>
+    {{ end }}
+    {{ range .Params.Talks }}
+        {{- if lt (.date | time.AsTime) (now.AddDate -1 0 0 | time.AsTime) -}}
+        {{ break }}
+        {{- end -}}
+        {{ partial "talk.html" . }}
+    {{ end }}
+    {{ range .Params.Talks }}
+    {{ partial "modal_talk.html" . }}
+    {{ end }}
     {{ with .Params.Publications }}
-        <h2 id="publications">Publications</h2>
+        <h2 id="publications">Recent Publications</h2>
     {{ end }}
     {{ range .Params.Publications }}
+        {{- if lt (.date | time.AsTime) (now.AddDate -3 0 0 | time.AsTime) -}}
+        {{ break }}
+        {{- end -}}
         {{ partial "publication.html" . }}
     {{ end }}
     {{ range .Params.Publications }}
